@@ -6,8 +6,8 @@ burb()
 
 #Dispatch event
 
-#Event loop
 
+#Event loop
 while True:
     answer = input().upper()
     dispatch(answer)

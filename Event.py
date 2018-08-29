@@ -18,10 +18,11 @@ def main():
     
     game = minesweeper()
     game.RANDOM_mine(N_MINE)
-
+    game.POP_win()
     while True:
         print(show(game))
         print(Position_mine)
+        print(POP_win)
         x = 0
         y = 0
         while True:
@@ -45,6 +46,7 @@ def main():
         if (x and y) > 0 and x <= GRID_HEIGHT or y <= GRID_WIDTH :
 
             game.SWEEPER_position(x,y)
+            
             if game.isOver() == True:
                 showLoseResult(x,y)
                 game = minesweeper()
@@ -54,6 +56,17 @@ def main():
                 Empty_mine = Position_mine
                 del Position_mine[:]
                 break
+            elif game.win_(x, y) == True:
+                print(show(game))
+                showWonResult()
+                game = minesweeper()
+                game.mine_anwser()
+
+                ##Clear list of position's mine
+                Empty_mine = Position_mine
+                del Position_mine[:]
+                break
+                
             elif game.isOverXX() == True:
                 print(show(game))
                 showWonResult()
@@ -85,8 +98,7 @@ def dispatch(answer):
         main()
         print(show(game))
                         
-    elif answer == 'R':
-        
+    elif answer == 'R':       
         main()
         print(show(game))
     elif answer == 'L':

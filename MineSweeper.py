@@ -20,38 +20,39 @@ import random
 print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++')
 print('                MineSweeper by Nutdanai                ')
 print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-GRID_HEIGHT = 9
-GRID_WIDTH = 9
-N_MINE = 1
+##GRID_HEIGHT = 9
+##GRID_WIDTH = 9
+##N_MINE = 5
 
-##GRID_HEIGHT = 0
-##while True:
-##    try:
-##        GRID_HEIGHT = int(input("ENTER HEIGHT AND WIDTH : "))       
-##    except ValueError:
-##        print("Not an integer!")
-##        continue
-##    else:
-##        break 
-##
-##GRID_WIDTH = GRID_HEIGHT
-##    
-##N_MINE = 0
-##while True:
-##    try:
-##        N_MINE = int(input("Enter Mine(bomb) : "))       
-##    except ValueError:
-##        print("Not an integer!")
-##        continue
-##    else:
-##        break 
+GRID_HEIGHT = 0
+while True:
+    try:
+        GRID_HEIGHT = int(input("ENTER HEIGHT AND WIDTH : "))       
+    except ValueError:
+        print("Not an integer!")
+        continue
+    else:
+        break 
 
+GRID_WIDTH = GRID_HEIGHT
+    
+N_MINE = 0
+while True:
+    try:
+        N_MINE = int(input("Enter Mine(bomb) : "))       
+    except ValueError:
+        print("Not an integer!")
+        continue
+    else:
+        break 
 
 START_CELL = 'XX'
 LAST_CELL = '-'
-Position_mine= []
+Position_mine = []
+POP_win = []
 mine = '[]'
 No_mine = '  '
+bonus = '@@'
 #-------------------------------------------------------------------
 #Variables
 #-------------------------------------------------------------------
@@ -66,6 +67,7 @@ class minesweeper(object):
         self.mine = mine
         self.isOver_ = False
         self.isOverXX_ = False
+        
     def RANDOM_mine(self,N_MINE):
         #Check range of mine that Was mine out of range ? 
         if N_MINE < GRID_HEIGHT*GRID_WIDTH:
@@ -81,7 +83,15 @@ class minesweeper(object):
                     continue
         else : return print('Mines was out of range')
         return Position_mine
-
+    def POP_win(self):
+        while len(POP_win) != 1:
+            row = random.randint(0,GRID_HEIGHT-1)
+            col = random.randint(0,GRID_WIDTH-1)
+            x = (row,col)
+            if x not in POP_win and x not in Position_mine:
+                POP_win.append((row,col)) 
+            else :
+                continue
     def mine_anwser(self):
         for i in range(len(Position_mine)):
             row = (Position_mine[i])[0]
@@ -95,7 +105,11 @@ class minesweeper(object):
         if (row,column) in Position_mine:     
             self.isOver_ = True
             self.grid[row][column] = mine
-            return (self.grid[row][column],self.isOver_) 
+            return (self.grid[row][column],self.isOver_)
+        if (row, column) in POP_win:
+            
+            self.grid[row][column] = bonus
+            return (self.grid[row][column])
         if row >= GRID_HEIGHT or column >= GRID_WIDTH:
             print("#####Sorry out of range#####")    
         else:
@@ -105,9 +119,6 @@ class minesweeper(object):
             if self.check_mine_AROUND( row, column) == '*0':
                 self.none_mine_around(row, column)
                 self.grid[row][column] = No_mine
-                
-                
-
             else:
                 return (self.grid[row][column])  
         return
@@ -313,58 +324,22 @@ class minesweeper(object):
                 if self.check_mine_AROUND( row+1, column-1) == '*0':
                     self.grid[row+1][column-1] = No_mine
             else:
-                if self.check_mine_AROUND( row, column+1) != '*0':
-                    return None
-                else:
+                if self.check_mine_AROUND( row, column+1) == '*0':
                     self.grid[row][column+1] = No_mine
-                    return self.none_mine_around(row, column+1)
-
-
-                if self.check_mine_AROUND( row+1, column) != '*0':
-                    return None
-                else:
+                if self.check_mine_AROUND( row+1, column) == '*0':
                     self.grid[row+1][column] = No_mine
-                    return self.none_mine_around(row+1, column)
-
-
-                if self.check_mine_AROUND( row+1, column+1) != '*0':
-                    return None
-                else:
+                if self.check_mine_AROUND( row+1, column+1) == '*0':
                     self.grid[row+1][column+1] = No_mine
-                    return self.none_mine_around(row+1, column+1)
-
-
-                if self.check_mine_AROUND( row-1, column-1) != '*0':
-                    return None
-                else:
+                if self.check_mine_AROUND( row-1, column-1) == '*0':
                     self.grid[row-1][column-1] = No_mine
-                    return self.none_mine_around(row-1, column-1)
-
-
-                if self.check_mine_AROUND( row-1, column) != '*0':
-                    return None
-                else:
+                if self.check_mine_AROUND( row-1, column) == '*0':
                     self.grid[row-1][column] = No_mine
-                    return self.none_mine_around(row-1, column)
-
-
-                if self.check_mine_AROUND( row-1, column+1) != '*0':
-                    return None
-                else:
+                if self.check_mine_AROUND( row-1, column+1) == '*0':
                     self.grid[row-1][column+1] = No_mine
-                    return self.none_mine_around(row-1, column+1)
-
-                if self.check_mine_AROUND( row, column-1) != '*0':
-                    return None
-                else:
+                if self.check_mine_AROUND( row, column-1) == '*0':
                     self.grid[row][column-1] = No_mine
-                    return self.none_mine_around(row, column-1)
-
-                if self.check_mine_AROUND( row+1, column-1) != '*0':
-                    return None
-                else:
+                if self.check_mine_AROUND( row+1, column-1) == '*0':
                     self.grid[row+1][column-1] = No_mine
-                    return self.none_mine_around(row+1, column-1)
         else:
             return self.grid[row][column]
         return
@@ -385,9 +360,16 @@ class minesweeper(object):
                     currentXX += 1
         if currentXX == N_MINE :
             self.isOverXX_ = True
+        return
+    def win_(self, row, column):
+        
+        if row == POP_win[0][0] and column == POP_win[0][1]:
+            self.isOverXX_ = True
+        return
+        
                     
     def isOver(self):
-        return self.isOver_
+        return self.isOver_ == True
     
     def isOverXX(self):
         return self.isOverXX_

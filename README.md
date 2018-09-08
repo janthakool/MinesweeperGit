@@ -36,3 +36,5 @@ GUI (Graphic User Interface)
 - Appearance file : สำหรับโชว์ข้อความต่างๆ เช่น เกมชนะ เกมแพ้ หรือข้อผิดพลาดในการกรอกข้อมูล
 - Event file : สำหรับควบคุมโปรแกรม
 - Main file : สำหรับรันโปรแกรมเพื่อเริ่มเกม โดยรันผ่าน cmd เลือก cd local file เพิ่มคำสั่ง py Main.py
+
+read more : https://sites.google.com/view/janthakool/my-portfolio/programming-project-i
